@@ -16,9 +16,6 @@ module.exports = (sequelize, Sequelize) => {
             fullname: {
                 type: Sequelize.STRING,
             },
-            title: {
-                type: Sequelize.STRING,
-            },
             email: {
                 type: Sequelize.STRING,
             },
@@ -37,5 +34,5 @@ module.exports = (sequelize, Sequelize) => {
         }
     );
 
-    return Messages;
+    return Users;
 };
