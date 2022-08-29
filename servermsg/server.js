@@ -19,7 +19,7 @@ app.use(morgan("dev"));
 app.use(cookieParser());
 
 app.use((req, res, next) => {
-    console.log("This is my Middleware");
+    //console.log("This is my Middleware");
     next();
 });
 
@@ -29,11 +29,13 @@ readdirSync("./routes").map((r) => {
 });
 
 // csrf
-app.use(csrfProtection);
+//app.use(csrfProtection);
 
-app.get("/api/csrf-token", (req, res) => {
-    res.json({ csrfToken: req.csrfToken() });
-});
+// app.get("/api/csrf-token", (req, res) => {
+//     let token = req.csrfToken();
+//     console.log("Token: ", token);
+//     res.status(200).json({ data: { csrfToken: token } });
+// });
 
 // port
 const port = process.env.PORT || 8000;
