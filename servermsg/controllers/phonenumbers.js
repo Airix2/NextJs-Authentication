@@ -17,19 +17,26 @@ export const getPhonenumbers = async (req, res) => {
     }
 };
 export const addPhonenumber = async (req, res) => {
-    console.log(req.body);
     try {
-        await Phonenumbers.create({
-            phonenumber: req.body.phonenumber,
+        let checkUnique = await Phonenumbers.findAll({
+            where: { phonenumber: req.body.phonenumber },
         });
-        res.status(200).json({ message: "OK" });
+        console.log(checkUnique);
+        if (checkUnique.length === 0) {
+            await Phonenumbers.create({
+                phonenumber: req.body.phonenumber,
+            });
+            return res.status(200).json("OK");
+        }
+        return res.status(501).json({
+            message: "The phonenumber already exists in the database",
+        });
     } catch (error) {
         console.log(error);
         res.status(400).json(error);
     }
 };
 export const updatePhonenumber = async (req, res) => {
-    console.log(req.body, req.query, req.params);
     try {
         let number = await Phonenumbers.update(
             {
@@ -45,7 +52,25 @@ export const updatePhonenumber = async (req, res) => {
         if (number[0] === 1) {
             return res.status(200).json("Phone Number Edited Successfully");
         }
-        return res.status(400).json("Number could not be find");
+        return res.status(400).json({ message: "Number could not be find" });
+    } catch (error) {
+        console.log(error);
+        res.status(400).json(error);
+    }
+};
+export const deletePhonenumber = async (req, res) => {
+    console.log(req.body, req.query, req.params);
+    try {
+        let answer = await Phonenumbers.destroy({
+            where: {
+                id: req.params.id,
+            },
+        });
+        console.log(answer);
+        if (answer === 1) {
+            return res.status(200).json("Phone Number Deleted Successfully");
+        }
+        return res.status(400).json({ message: "Number could not be deleted" });
     } catch (error) {
         console.log(error);
         res.status(400).json(error);

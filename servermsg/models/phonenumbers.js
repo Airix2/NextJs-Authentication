@@ -10,6 +10,8 @@ module.exports = (sequelize, Sequelize) => {
             },
             phonenumber: {
                 type: Sequelize.STRING,
+                unique: true,
+                allowNull: false,
             },
         },
         {
