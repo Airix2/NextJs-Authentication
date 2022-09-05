@@ -28,5 +28,6 @@ db.sequelize = sequelize;
 
 db.Users = require("./users")(sequelize, Sequelize);
 db.Phonenumbers = require("./phonenumbers")(sequelize, Sequelize);
+db.Teams = require("./teams")(sequelize, Sequelize);
 
 module.exports = db;

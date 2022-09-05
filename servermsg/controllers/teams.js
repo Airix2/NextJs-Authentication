@@ -1,46 +1,48 @@
 const db = require("../models/index.js");
 const { Op, fn, col } = require("sequelize");
 
-const { Phonenumbers } = db;
+const { Teams } = db;
 
-export const getPhonenumbers = async (req, res) => {
+export const getTeams = async (req, res) => {
     try {
-        let phones = await Phonenumbers.findAll({
+        let teams = await Teams.findAll({
             raw: true,
-            order: [["id", "ASC"]],
+            order: [["name", "ASC"]],
         });
         //console.log(phones);
-        res.status(200).json(phones);
+        res.status(200).json(teams);
     } catch (error) {
         console.log(error);
         res.status(400).json(error);
     }
 };
-export const addPhonenumber = async (req, res) => {
+export const addTeam = async (req, res) => {
     try {
-        let checkUnique = await Phonenumbers.findAll({
-            where: { phonenumber: req.body.phonenumber },
+        let checkUnique = await Teams.findAll({
+            where: { name: req.body.team },
         });
         console.log(checkUnique);
         if (checkUnique.length === 0) {
-            await Phonenumbers.create({
-                phonenumber: req.body.phonenumber,
+            await Teams.create({
+                name: req.body.team,
             });
             return res.status(200).json("OK");
         }
         return res.status(501).json({
-            message: "The phonenumber already exists in the database",
+            message: "The team already exists in the database",
         });
     } catch (error) {
         console.log(error);
         res.status(400).json(error);
     }
 };
-export const updatePhonenumber = async (req, res) => {
+export const updateTeam = async (req, res) => {
+    console.log(req.params, req.body);
     try {
-        let number = await Phonenumbers.update(
+        let number = await Teams.update(
             {
-                phonenumber: req.body.phonenumber,
+                name: req.body.name,
+                phonenumberId: req.body.phonenumberId,
             },
             {
                 where: {
@@ -50,18 +52,18 @@ export const updatePhonenumber = async (req, res) => {
             }
         );
         if (number[0] === 1) {
-            return res.status(200).json("Phone number edited successfully");
+            return res.status(200).json("Team edited successfully");
         }
-        return res.status(400).json({ message: "Number could not be found" });
+        return res.status(400).json({ message: "Team could not be found" });
     } catch (error) {
         console.log(error);
         res.status(400).json(error);
     }
 };
-export const deletePhonenumber = async (req, res) => {
+export const deleteTeam = async (req, res) => {
     console.log(req.body, req.query, req.params);
     try {
-        let answer = await Phonenumbers.destroy({
+        let answer = await Teams.destroy({
             where: {
                 id: req.params.id,
             },
