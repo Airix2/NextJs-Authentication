@@ -1,15 +1,20 @@
 const db = require("../models/index.js");
 const { Op, fn, col } = require("sequelize");
 
-const { Teams } = db;
+const { Teams, Phonenumbers } = db;
+Teams.hasOne(Phonenumbers, { foreignKey: "id" });
+Phonenumbers.belongsTo(Teams, { foreignKey: "id" });
 
 export const getTeams = async (req, res) => {
     try {
         let teams = await Teams.findAll({
             raw: true,
             order: [["name", "ASC"]],
+            include: {
+                model: Phonenumbers,
+            },
         });
-        //console.log(phones);
+        console.log(teams);
         res.status(200).json(teams);
     } catch (error) {
         console.log(error);
